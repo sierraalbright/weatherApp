@@ -1,107 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
 
-    <title>Weather Dashboard</title>
-  </head>
-  <body>
-    <nav class="bg-primary">
-      <h2 class="text-center text-light ">Weather Dashboard</h2>
-    </nav>
-    <div>
-      <div class="row">
-        <div class="col-sm-3">
-          <form id="city-form">
-            <label class="px-2" >Search for a City:</label>
-            <div>
-              <input type="text" id="cityInput" class="ml-1" placeholder="enter city" size="10"/>
-              <!-- Button triggers new city to be added -->
-              <input id="addCity" type="submit" value="Go" class='bg-primary ml-1'/>
-              <br />
-            </div>
-            <br />
-          </form>
-          <div id="citiesView" class="block"></div>
-        </div>
-        <div class="col-sm-9" >
-        <div>
-          <div class="row">
-            <h5 id="enteredCity" class='p-4'></h5>
-          </div>
-          <!-- todays currecnt weather -->
-          <div id="temp" class="row m-4 ">
-          </div>
-          <div id="humidity" class="row m-4">
-          </div>
-          <div id="windSpeed" class="row m-4">
-          </div>
-          <div id="uvIndex" class="row m-4">            
-          </div>
-        </div>
-          <div>
-              <h5 class="row p-4">5 day forcast:</h5>
-            </div>
-            <div id='5Day' class="row">
-              <!-- the containers for the 5 day forcast -->
-              <div class="col-sm-2 mb-2">
-                <div id="day1" class="card bg-primary">                  
-                  <p id="day1Date"></p>
-                  <div id="day1Icon">
-                  </div>
-                  <p id="day1Temp"></p>
-                  <p id="day1Humidity"></p>                  
-                </div>
-              </div>
-              <div class="col-sm-2 mb-2 ">
-                <div id="day2" class="card bg-primary">
-                  <p id="day2Date"></p>
-                  <div id="day2Icon">
-                  </div>
-                  <p id="day2Temp"></p>
-                  <p id="day2Humidity"></p>                  
-                </div>
-              </div>
-              <div class="col-sm-2 mb-2">
-                <div id="day3" class="card bg-primary">
-                  <p id="day3Date"></p>
-                  <div id="day3Icon">
-                  </div>
-                  <p id="day3Temp"></p>
-                  <p id="day3Humidity"></p>                  
-                </div>
-              </div>
-              <div class="col-sm-2 mb-2">
-                <div id="day4" class="card bg-primary">
-                  <p id="day4Date"></p>
-                  <div id="day4Icon">
-                  </div>
-                  <p id="day4Temp"></p>
-                  <p id="day4Humidity"></p>
-                </div>
-              </div>
-              <div class="col-sm-2 mb-2">
-                <div id="day5" class="card bg-primary">
-                  <p id="day5Date"></p>
-                  <div id="day5Icon">
-                  </div>
-                  <p id="day5Temp"></p>
-                  <p id="day5Humidity"></p>                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+<head>
+  <meta charset="utf-8">
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Weather Dashboard</h1>
+
+    <!-- This form will be where users input data about the movies -->
+    <form id="city-form">
+      <label for="city-input">Search for a city</label>
+      <input type="text" id="city-input"><br>
+
+      <!-- This button will trigger our AJAX call -->
+      <input id="find-city" type="submit" value="Search">
+    </form>
+
+    <!-- We'll be dumping our JSON contents in here -->
+    <div id="city-view"></div>
+
+    <div class="today"></div>
+    <div class="city"></div>
+    <div class="wind"></div>
+    <div class="humidity"></div>
+    <div class="temp"></div>
+    <div class="uvIndex"><span id="current-uv"></span></div>
+    <img class="icon">
+  </div>
+
+  <div id="forecast" class="card-deck invisible">
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-body">
+        <h5 class="day1"></h5>
+        <img class="icon1">
+        <p class="temp1"></p>
+        <p class="humidity1"></p>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="script.js"></script>
-  </body>
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-body">
+        <h5 class="day2"></h5>
+        <img class="icon2">
+        <p class="temp2"></p>
+        <p class="humidity2"></p>
+      </div>
+    </div>
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-body">
+        <h5 class="day3"></h5>
+        <img class="icon3">
+        <p class="temp3"></p>
+        <p class="humidity3"></p>
+      </div>
+    </div>
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-body">
+        <h5 class="day4"></h5>
+        <img class="icon4">
+        <p class="temp4"></p>
+        <p class="humidity4"></p>
+      </div>
+    </div>
+    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+      <div class="card-body">
+        <h5 class="day5"></h5>
+        <img class="icon5">
+        <p class="temp5"></p>
+        <p class="humidity5"></p>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script type="text/javascript">
+    // This .on("click") function will trigger the AJAX Call
+    $("#find-city").on("click", function (event) {
+
+      event.preventDefault();
+
+      // Here we grab the text from the input box
+      var city = $("#city-input").val();
+
+      // Here we construct our URL
+      var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=734796d6ef828ddeb1495bc4b1aac332&units=imperial";
+
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).then(function (response) {
+        var today = moment().format('LLLL');
+        console.log(response);
+//get lat and long in order to use in URL needed
+        var lat = response.city.coord.lat;
+        var lon = response.city.coord.lon;
+//Use another URL to get UV Index data
+        var uvIndexURL = "https://api.openweathermap.org/data/2.5/uvi?appid=734796d6ef828ddeb1495bc4b1aac332&lat=" + lat + "&lon=" + lon;
+        $.ajax({
+          url: uvIndexURL,
+          method: "GET"
+        }).then(function (response) {
+          console.log(response);
+
+          console.log(response.value);
+
+          var uvIndex = response.value;
+          var uvColor;
+          if (parseInt(uvIndex) >= 0 && parseInt(uvIndex) <= 2) {
+            uvColor = "green";
+          }
+          else if (uvIndex >= 3 && uvIndex <= 5) {
+            uvColor = "yellow";
+
+          }
+          else if (uvIndex >= 6 && uvIndex <= 7) {
+            uvColor = "orange";
+
+          }
+          else if (uvIndex >= 8 && uvIndex <= 10) {
+            uvColor = "red";
+
+          }
+          else if (uvIndex >= 11) {
+            uvColor = "violet";
+
+          }
+
+          $("#current-uv").text(uvIndex).css("background-color", uvColor);
+          $(".uvIndex").prepend("UV Index: ");
+        })
+
+        $(".today").append("Today's Date: " + today);
+        var icon = response.list[0].weather[0].icon;
+        $(".icon").attr("src", "http://openweathermap.org/img/wn/" + icon + "@2x.png");
+        $(".city").text("City: " + response.city.name);
+        $(".wind").text("Wind Speed: " + response.list[0].wind.speed + " MPH");
+        $(".temp").text("Temp: " + response.list[0].main.temp.toFixed(1));
+        $(".humidity").text("Humidity: " + response.list[0].main.humidity + " %");
+
+
+        $("#forecast").removeClass("invisible");
+        //5 day forcast
+        $(".day1").text(response.list[7].dt_txt);
+        var icon1 = response.list[7].weather[0].icon;
+        $(".icon1").attr("src", "http://openweathermap.org/img/wn/" + icon1 + "@2x.png");
+        $(".temp1").text("Temp: " + response.list[7].main.temp.toFixed(1));
+        $(".humidity1").text("Humidity: " + response.list[7].main.humidity + " %");
+
+        $(".day2").text(response.list[15].dt_txt);
+        var icon2 = response.list[15].weather[0].icon;
+        $(".icon2").attr("src", "http://openweathermap.org/img/wn/" + icon2 + "@2x.png");
+        $(".temp2").text("Temp: " + response.list[15].main.temp.toFixed(1));
+        $(".humidity2").text("Humidity: " + response.list[15].main.humidity + " %");
+
+        $(".day3").text(response.list[23].dt_txt);
+        var icon3 = response.list[23].weather[0].icon;
+        $(".icon3").attr("src", "http://openweathermap.org/img/wn/" + icon3 + "@2x.png");
+        $(".temp3").text("Temp: " + response.list[23].main.temp.toFixed(1));
+        $(".humidity3").text("Humidity: " + response.list[23].main.humidity + " %");
+
+        $(".day4").text(response.list[31].dt_txt);
+        var icon4 = response.list[31].weather[0].icon;
+        $(".icon4").attr("src", "http://openweathermap.org/img/wn/" + icon4 + "@2x.png");
+        $(".temp4").text("Temp: " + response.list[31].main.temp.toFixed(1));
+        $(".humidity4").text("Humidity: " + response.list[31].main.humidity + " %");
+
+        $(".day5").text(response.list[39].dt_txt);
+        var icon5 = response.list[39].weather[0].icon;
+        $(".icon5").attr("src", "http://openweathermap.org/img/wn/" + icon5 + "@2x.png");
+        $(".temp5").text("Temp: " + response.list[39].main.temp.toFixed(1));
+        $(".humidity5").text("Humidity: " + response.list[39].main.humidity + " %");
+
+
+      });
+    });
+  </script>
+
+</body>
+
 </html>
